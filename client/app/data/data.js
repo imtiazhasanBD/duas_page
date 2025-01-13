@@ -1,0 +1,1 @@
+export const nav_icon = ['home', 'alldua','memorize','bookmark','ruqyah','dua-info','books']

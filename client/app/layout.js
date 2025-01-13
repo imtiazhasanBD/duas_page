@@ -1,4 +1,6 @@
+import CategorySection from "./components/CategorySection";
 import Header from "./components/Header";
+import SideNavBar from "./components/SideNavBar";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
@@ -7,60 +9,12 @@ export default function RootLayout({ children }) {
       <body className="bg-gray-100">
         <div className="flex min-h-screen p-6">
           {/* Sidebar */}
-          <aside className="fixed top-6 left-6 h-screen w-28 bg-white shadow-md dark:bg-gray-800 overflow-y-auto  rounded-3xl px-4 dark:bg-dark-bg lg:h-[calc(93vh)] xl:h-[94vh] 2xl:h-[93vh] pb-16 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <nav className="p-4">
-              <ul className="space-y-4">
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 1
-                </li>
-                <li className="text-gray-800 dark:text-gray-200 font-medium">
-                  Sidebar Item 2
-                </li>
-              </ul>
-            </nav>
-          </aside>
-
+          <SideNavBar />
           {/* Main Content Area */}
           <div className="flex pt-20  ml-32 gap-4 h-screen fixed">
             {/* Header */}
             <header className="fixed top-0 left-40 right-0  py-6 pr-10 z-10">
-              <Header/>
+              <Header />
             </header>
             <section>
               {/* Categories */}
@@ -68,18 +22,7 @@ export default function RootLayout({ children }) {
                 className="mx-2 h-[85.5vh] lg:min-w-[350px] overflow-hidden bg-white
       xs:hidden sm:hidden md:hidden lg:block xs:h-screen sm:h-screen lg:h-[85vh] space-y-10 overflow-y-auto"
               >
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
-                <p>Duas Importance</p>
+                <CategorySection />
               </div>
 
               {/* Main Content */}
