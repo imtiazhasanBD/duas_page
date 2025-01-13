@@ -1,12 +1,13 @@
+import Header from "./components/Header";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gray-200">
+      <body className="bg-gray-100">
         <div className="flex min-h-screen p-6">
           {/* Sidebar */}
-          <aside className="fixed top-6 left-6 h-screen w-28 bg-white shadow-md dark:bg-gray-800 overflow-y-auto  rounded-3xl px-4 dark:bg-dark-bg lg:h-[calc(93vh)] xl:h-[94vh] 2xl:h-[93vh] pb-16">
+          <aside className="fixed top-6 left-6 h-screen w-28 bg-white shadow-md dark:bg-gray-800 overflow-y-auto  rounded-3xl px-4 dark:bg-dark-bg lg:h-[calc(93vh)] xl:h-[94vh] 2xl:h-[93vh] pb-16 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             <nav className="p-4">
               <ul className="space-y-4">
                 <li className="text-gray-800 dark:text-gray-200 font-medium">
@@ -56,10 +57,10 @@ export default function RootLayout({ children }) {
           </aside>
 
           {/* Main Content Area */}
-          <div className="flex pt-16  ml-32 gap-4 h-screen fixed">
+          <div className="flex pt-20  ml-32 gap-4 h-screen fixed">
             {/* Header */}
-            <header className="fixed top-0 left-40 w-full right-0  p-4 z-10">
-              <h1 className="text-xl font-bold text-gray-800">Doas Page</h1>
+            <header className="fixed top-0 left-40 right-0  py-6 pr-10 z-10">
+              <Header/>
             </header>
             <section>
               {/* Categories */}

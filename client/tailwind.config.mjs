@@ -7,7 +7,13 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        customLiteBlue: "#F3F4F6", 
+        customGreen: "#1FA45B", 
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 };
