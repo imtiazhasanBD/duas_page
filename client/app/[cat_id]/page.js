@@ -16,7 +16,7 @@ const page = () => {
       setLoading(true)
       try {
         const res = await fetch(
-          `http://localhost:3000/categories/${cat_id}/details`,
+          `https://duas-page.onrender.com/categories/${cat_id}/details`,
           {
             cache: "no-store",
           }

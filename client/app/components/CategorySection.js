@@ -27,7 +27,7 @@ export default function CategorySection() {
     async function fetchCategories() {
        setLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/categories");
+        const res = await fetch("https://duas-page.onrender.com/categories");
         const data = await res.json();
         setCategories(data);
         setFilteredCategories(data);
@@ -45,7 +45,7 @@ export default function CategorySection() {
        setExpandedCategory(Number(cat_id));
       async function fetchSubCategories() {
         try {
-          const res = await fetch(`http://localhost:3000/categories/${cat_id}`);
+          const res = await fetch(`https://duas-page.onrender.com/categories/${cat_id}`);
           const data = await res.json();
           setSubCategories(data || []);
         } catch (error) {
@@ -65,7 +65,7 @@ export default function CategorySection() {
       async function fetchSubDuas() {
         try {
           const res = await fetch(
-            `http://localhost:3000/categories/${cat_id}/subcategories/${subcat_id}/duas`
+            `https://duas-page.onrender.com/categories/${cat_id}/subcategories/${subcat_id}/duas`
           );
           const data = await res.json();
           setSubDuas(data || []);
