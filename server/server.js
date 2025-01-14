@@ -10,7 +10,7 @@ app.use(cors({
   }));
   
 // Path to the SQLite database
-const dbPath = './dua_main.sqlite';
+const dbPath = './data/dua_main.sqlite';
 
 // Connect to the SQLite database
 const db = new sqlite3.Database(dbPath, (err) => {
