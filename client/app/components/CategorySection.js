@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { subCategories } from "../data/data";
 
 export default function CategorySection() {
   const [categories, setCategories] = useState([]);
@@ -51,7 +52,9 @@ export default function CategorySection() {
               </button>
               {expandedCategory === category.cat_id && (
                 <ul className="ml-4 mt-2">
-                   <li>subcategories</li>
+                  {subCategories.map(cat => (
+                    <li>{cat}</li>
+                  )) }
                 </ul>
               )}
             </li>
