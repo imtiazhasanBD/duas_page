@@ -2,19 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { subCategories } from "../data/data";
 import { IoSearchOutline } from "react-icons/io5";
+import { useSearchParams } from "next/navigation";
 
 export default function CategorySection() {
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [subDuas, setSubDuas] = useState([]);
   const [expandedCategory, setExpandedCategory] = useState(null);
-  const [expandedSubCategory, setExpandeSubCategory] = useState(null);
+  const [expandedSubCategory, setExpandedSubCategory] = useState(null);
+  const [selectedDua, setSelectedDua] = useState(null);
   const [searchValue, setSearchValue] = useState("");
-  const [filteredCategories, setFilteredCategories] = useState(null);
+  const [filteredCategories, setFilteredCategories] = useState([]);
 
+  const searchParams = useSearchParams();
+  const cat_id = searchParams.get("cat");
+  const subcat_id = searchParams.get("subcat");
   const router = useRouter();
 
   useEffect(() => {
+    // Fetch all categories
     async function fetchCategories() {
       try {
         const res = await fetch("http://localhost:3000/categories");
@@ -28,16 +35,60 @@ export default function CategorySection() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    if (cat_id) {
+      // Fetch subcategories when a category is selected
+      async function fetchSubCategories() {
+        try {
+          const res = await fetch(`http://localhost:3000/categories/${cat_id}`);
+          const data = await res.json();
+          setSubCategories(data || []);
+        } catch (error) {
+          console.error("Failed to fetch subcategories:", error);
+        }
+      }
+      fetchSubCategories();
+    } else {
+      setSubCategories([]);
+    }
+  }, [cat_id]);
+
+  useEffect(() => {
+    if (cat_id && subcat_id) {
+      // Fetch duas when a subcategory is selected
+      async function fetchSubDuas() {
+        try {
+          const res = await fetch(
+            `http://localhost:3000/categories/${cat_id}/subcategories/${subcat_id}/duas`
+          );
+          const data = await res.json();
+          setSubDuas(data || []);
+        } catch (error) {
+          console.error("Failed to fetch duas:", error);
+        }
+      }
+      fetchSubDuas();
+    } else {
+      setSubDuas([]);
+    }
+  }, [cat_id, subcat_id]);
+
   const handleCategoryClick = (catName, catId) => {
     setExpandedCategory(catId === expandedCategory ? null : catId);
-    router.push(`${catName}/?cat=${catId}`);
+    router.push(`/${catName}/?cat=${catId}`);
   };
 
   const handleSubcategoryClick = (catId, subcatId) => {
+    setExpandedSubCategory(subcatId === expandedSubCategory ? null : subcatId);
     router.push(`/?cat=${catId}&subcat=${subcatId}`);
+  };
+  const handleSubDuaClick = (catId, subcatId,dua) => {
+    setSelectedDua(dua === selectedDua ? null : dua);
+    router.push(`/?cat=${catId}&subcat=${subcatId}&dua=${dua}`);
   };
 
   useEffect(() => {
+    // Filter categories based on search input
     const filtered = categories.filter((category) =>
       category.cat_name_en.toLowerCase().includes(searchValue.toLowerCase())
     );
@@ -45,10 +96,9 @@ export default function CategorySection() {
   }, [categories, searchValue]);
 
   const handleSearch = (event) => {
-    setSearchValue(event.target.value.toLowerCase());
+    setSearchValue(event.target.value);
   };
-
-  console.log(filteredCategories);
+console.log(subDuas);
 
   return (
     <section
@@ -65,88 +115,73 @@ export default function CategorySection() {
             placeholder="Search Categories"
             value={searchValue}
             onChange={handleSearch}
-            className="w-full px-4 py-[11px] pl-11 border border-gray-200 rounded-md shadow-sm  outline-none focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full px-4 py-[11px] pl-11 border border-gray-200 rounded-md shadow-sm outline-none focus:outline-none focus:ring-2 focus:ring-green-600"
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 h-10 w-12 rounded-md flex items-center justify-center">
             <IoSearchOutline className="text-gray-600 text-xl" />
           </div>
         </form>
       </div>
-      <div className=" overflow-y-auto h-full px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pb-16">
+      <div className="overflow-y-auto h-full px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pb-28">
+   {/* ..................Categories ....................*/}
         <ul>
-          {filteredCategories?.map((category) => (
+          {filteredCategories.map((category) => (
             <li key={category.cat_id} className="mb-4">
               <button
-                onClick={() =>
-                  handleCategoryClick(category.cat_name_en, category.cat_id)
-                }
+                onClick={() => handleCategoryClick(category.cat_name_en, category.cat_id)}
                 className={`flex items-center space-x-4 px-4 py-3 hover:bg-customLiteBlue rounded-lg w-full ${
-                  expandedCategory === category.cat_id
-                    ? "bg-customLiteBlue"
-                    : ""
+                  expandedCategory === category.cat_id ? "bg-customLiteBlue" : ""
                 }`}
               >
                 <div className="bg-gray-50 rounded-sm h-[50px] w-[50px] flex justify-center items-center">
                   <img
                     src={`/cat_icon/${category.cat_icon}.svg`}
-                    alt={`logo`}
+                    alt={`Category Icon`}
                     className="w-8 h-8"
                   />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-lg font-semibold">
-                    {category.cat_name_en}
-                  </h3>
+                  <h3 className="text-lg font-semibold">{category.cat_name_en}</h3>
                   <p className="text-sm text-gray-500">
-                    Subcategory: {category.no_of_subcat}
+                    Subcategories: {category.no_of_subcat}
                   </p>
                 </div>
               </button>
-       {/*sub category............ */}
+    {/* .......................Subcategories ......................*/}
               {expandedCategory === category.cat_id && (
                 <ul className="flex flex-col space-y-2 ml-8 border-l-2 border-dotted my-2 border-customGreen">
-                  {subCategories.map((subCat, i) => (
+                  {subCategories.map((subCat) => (
                     <div
-                      key={i}
-                      className="flex border-dotted flex-col justify-start items-start gap-y-2 ml-3 cursor-pointer"
+                      key={subCat.subcat_id}
+                      className="flex flex-col justify-start items-start gap-y-2 ml-3 cursor-pointer"
                     >
                       <div className="flex flex-row my-2">
                         <div className="bg-customGreen -translate-x-4 mt-1.5 w-1.5 rounded-full h-1.5"></div>
                         <div>
                           <span
-                            onClick={() => setExpandeSubCategory(i)}
+                            onClick={() =>
+                              handleSubcategoryClick(subCat.cat_id, subCat.subcat_id)
+                            }
                             className={`font-semibold text-sm ${
-                              expandedSubCategory === i
+                              expandedSubCategory === subCat.subcat_id
                                 ? "text-customGreen"
                                 : "text-gray-800"
                             }`}
                           >
-                            {subCat}
+                            {subCat.subcat_name_en}
                           </span>
-                    {/* sub duas...............*/}
-                          {expandedSubCategory === i && (
+          {/* .......................Duas ................*/}
+                          {expandedSubCategory === subCat.subcat_id && (
                             <div className="flex flex-col space-y-4 mt-4 text-sm">
-                              <div className="flex flex-row">
-                                <img
-                                  src="/duaarrow.svg"
-                                  className="-translate-y-1 mr-2"
-                                />
-                                <span>Allah's guidance #1</span>
-                              </div>
-                              <div className="flex flex-row">
-                                <img
-                                  src="/duaarrow.svg"
-                                  className="-translate-y-1 mr-2"
-                                />
-                                <span>Allah's guidance #1</span>
-                              </div>
-                              <div className="flex flex-row">
-                                <img
-                                  src="/duaarrow.svg"
-                                  className="-translate-y-1 mr-2"
-                                />
-                                <span>Allah's guidance #1</span>
-                              </div>
+                              {subDuas.map((dua) => (
+                                <div key={dua.dua_id} className="flex flex-row" onClick={() => handleSubDuaClick(category.cat_id,subCat.subcat_id,dua.id)}>
+                                  <img
+                                    src="/duaarrow.svg"
+                                    className="-translate-y-1 mr-2"
+                                  />
+                                  <span className={`${selectedDua === dua.id ? "text-customGreen" : ""} font-normal`}>{dua.dua_name_en}</span>
+                                </div>
+                              ))}
                             </div>
                           )}
                         </div>
