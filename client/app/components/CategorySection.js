@@ -18,10 +18,11 @@ export default function CategorySection() {
   const searchParams = useSearchParams();
   const cat_id = searchParams.get("cat");
   const subcat_id = searchParams.get("subcat");
+  const dua_id = searchParams.get("dua");
   const router = useRouter();
 
+  // Fetch all categories
   useEffect(() => {
-    // Fetch all categories
     async function fetchCategories() {
       try {
         const res = await fetch("http://localhost:3000/categories");
@@ -35,9 +36,10 @@ export default function CategorySection() {
     fetchCategories();
   }, []);
 
+  // Fetch subcategories when a category is selected
   useEffect(() => {
     if (cat_id) {
-      // Fetch subcategories when a category is selected
+       setExpandedCategory(Number(cat_id));
       async function fetchSubCategories() {
         try {
           const res = await fetch(`http://localhost:3000/categories/${cat_id}`);
@@ -53,9 +55,10 @@ export default function CategorySection() {
     }
   }, [cat_id]);
 
+  // Fetch duas when a subcategory is selected
   useEffect(() => {
     if (cat_id && subcat_id) {
-      // Fetch duas when a subcategory is selected
+      setExpandedSubCategory(Number(subcat_id));
       async function fetchSubDuas() {
         try {
           const res = await fetch(
@@ -72,6 +75,8 @@ export default function CategorySection() {
       setSubDuas([]);
     }
   }, [cat_id, subcat_id]);
+
+  // is duas selected
 
   const handleCategoryClick = (catName, catId) => {
     setExpandedCategory(catId === expandedCategory ? null : catId);
@@ -98,7 +103,7 @@ export default function CategorySection() {
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
   };
-console.log(subDuas);
+console.log(typeof(selectedDua));
 
   return (
     <section
@@ -179,7 +184,7 @@ console.log(subDuas);
                                     src="/duaarrow.svg"
                                     className="-translate-y-1 mr-2"
                                   />
-                                  <span className={`${selectedDua === dua.id ? "text-customGreen" : ""} font-normal`}>{dua.dua_name_en}</span>
+                                  <span className={`${(selectedDua === dua.id || Number(dua_id) === dua.id ) ? "text-customGreen" : ""} font-normal`}>{dua.dua_name_en}</span>
                                 </div>
                               ))}
                             </div>
