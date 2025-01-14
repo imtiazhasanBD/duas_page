@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
+import SkeletonCategory from "./SkeletonCategory";
 
 export default function CategorySection() {
   const [categories, setCategories] = useState([]);
@@ -14,7 +15,7 @@ export default function CategorySection() {
   const [selectedDua, setSelectedDua] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const cat_id = searchParams.get("cat");
   const subcat_id = searchParams.get("subcat");
@@ -24,11 +25,13 @@ export default function CategorySection() {
   // Fetch all categories
   useEffect(() => {
     async function fetchCategories() {
+       setLoading(true);
       try {
         const res = await fetch("http://localhost:3000/categories");
         const data = await res.json();
         setCategories(data);
         setFilteredCategories(data);
+        setLoading(false)
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       }
@@ -79,18 +82,29 @@ export default function CategorySection() {
   // is duas selected
 
   const handleCategoryClick = (catName, catId) => {
+    
     setExpandedCategory(catId === expandedCategory ? null : catId);
     router.push(`/${catName}/?cat=${catId}`);
   };
 
   const handleSubcategoryClick = (catName, catId, subcatId) => {
     setExpandedSubCategory(subcatId === expandedSubCategory ? null : subcatId);
-    router.push(`/${catName}/?cat=${catId}&subcat=${subcatId}`);
+    router.push(
+      `/${catName}/?cat=${catId}&subcat=${subcatId}`,
+      undefined,
+      { shallow: true } 
+    );
   };
-  const handleSubDuaClick = (catName, catId, subcatId,dua) => {
+  
+  const handleSubDuaClick = (catName, catId, subcatId, dua) => {
     setSelectedDua(dua === selectedDua ? null : dua);
-    router.push(`/${catName}/?cat=${catId}&subcat=${subcatId}&dua=${dua}`);
+    router.push(
+      `/${catName}/?cat=${catId}&subcat=${subcatId}&dua=${dua}`,
+      undefined,
+      { shallow: true } 
+    );
   };
+  
 
   useEffect(() => {
     // Filter categories based on search input
@@ -103,7 +117,9 @@ export default function CategorySection() {
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
   };
-console.log(typeof(selectedDua));
+  
+
+console.log(subDuas);
 
   return (
     <section
@@ -129,6 +145,7 @@ console.log(typeof(selectedDua));
       </div>
       <div className="overflow-y-auto h-full px-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pb-28">
    {/* ..................Categories ....................*/}
+        {loading ? <SkeletonCategory/> :
         <ul>
           {filteredCategories.map((category) => (
             <li key={category.cat_id} className="mb-4">
@@ -198,6 +215,7 @@ console.log(typeof(selectedDua));
             </li>
           ))}
         </ul>
+          }
       </div>
     </section>
   );

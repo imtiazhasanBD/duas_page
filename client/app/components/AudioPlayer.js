@@ -120,7 +120,7 @@ const AudioPlayer = ({audio}) => {
       </div>
 
       <audio
-        src={audio}
+        src={audio.replace("http://www.ihadis.com/", "https://api.duaruqyah.com/")}
         ref={audioRef}
       />
     </>

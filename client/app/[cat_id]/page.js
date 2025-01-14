@@ -2,16 +2,18 @@
 import { useEffect, useState } from "react";
 import AudioPlayer from "../components/AudioPlayer";
 import { useSearchParams } from "next/navigation";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 const page = () => {
   const searchParams = useSearchParams();
   const [allDous, setAllDous] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const cat = searchParams.get("cat");
     if (!cat) return;
-
     const fetchCategoryDetails = async (cat_id) => {
+      setLoading(true)
       try {
         const res = await fetch(
           `http://localhost:3000/categories/${cat_id}/details`,
@@ -21,6 +23,7 @@ const page = () => {
         );
         const data = await res.json();
         setAllDous(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching category details:", error);
       }
@@ -28,16 +31,19 @@ const page = () => {
 
     fetchCategoryDetails(cat);
   }, [searchParams]);
-
+if(loading){
+  return (
+    <SkeletonLoader/>
+  )
+}
   console.log(allDous);
 
   return (
-    <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-      {allDous.map((subCat) => (
-        <>
+    <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 mr-36">
+      {allDous?.map((subCat) => (
+        <div key={subCat.subcat_id}>
           {/* sub category name*/}
           <div
-            key={subCat.subcat_id}
             className="flex mb-5 mr-2  flex-row bg-white rounded-lg px-6 py-4 justify-start items-center"
           >
             <p className="text-gray-800 font-medium">
@@ -46,7 +52,7 @@ const page = () => {
             </p>
           </div>
           {/* dua section */}
-          {subCat.duas.map((dus) => (
+          {subCat.duas?.map((dus) => (
             <div
               key={dus.dua_i}
               className="bg-white shadow-md rounded-lg px-6 pt-6 mb-6 mr-2"
@@ -94,9 +100,9 @@ const page = () => {
               {/* Action Icons */}
               <div className="flex flex-row items-center justify-between pt-6">
                 {dus.audio && 
-                <AudioPlayer audio="https://api.duaruqyah.com/duaaudiofinal/2.mp3"/>
+                <AudioPlayer audio={dus.audio}/>
                 }
-                <div className="flex items-center gap-x-6 py-6 xs:gap-x-4">
+                <div className="flex items-center  gap-x-6 py-6 xs:gap-x-4">
                   <div id="copy" className="relative w-6">
                     <img
                       className="cursor-pointer"
@@ -136,7 +142,7 @@ const page = () => {
               </div>
             </div>
           ))}
-        </>
+        </div>
       ))}
     </div>
   );

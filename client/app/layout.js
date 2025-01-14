@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
           {/* Sidebar */}
           <SideNavBar />
           {/* Main Content Area */}
-          <div className="flex pt-[70px] ml-[122px] gap-4 h-screen fixed">
+          <div className="flex pt-[70px] ml-[122px] gap-4 h-screen fixed pr-2 w-full">
             {/* Header */}
             <header className="fixed top-0 left-40 right-0  py-6 pr-10 z-10">
               <Header />
