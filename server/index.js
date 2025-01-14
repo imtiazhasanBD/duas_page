@@ -8,6 +8,11 @@ const port = 3000;
 app.use(cors({
     origin: 'http://localhost:3001', // Replace with your frontend's URL
   }));
+
+  app.get("/", (req, res) => {
+    res.json("Server is Working..");
+  });
+  
   
 // Path to the SQLite database
 const dbPath = './data/dua_main.sqlite';
