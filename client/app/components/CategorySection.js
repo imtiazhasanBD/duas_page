@@ -83,13 +83,13 @@ export default function CategorySection() {
     router.push(`/${catName}/?cat=${catId}`);
   };
 
-  const handleSubcategoryClick = (catId, subcatId) => {
+  const handleSubcategoryClick = (catName, catId, subcatId) => {
     setExpandedSubCategory(subcatId === expandedSubCategory ? null : subcatId);
-    router.push(`/?cat=${catId}&subcat=${subcatId}`);
+    router.push(`/${catName}/?cat=${catId}&subcat=${subcatId}`);
   };
-  const handleSubDuaClick = (catId, subcatId,dua) => {
+  const handleSubDuaClick = (catName, catId, subcatId,dua) => {
     setSelectedDua(dua === selectedDua ? null : dua);
-    router.push(`/?cat=${catId}&subcat=${subcatId}&dua=${dua}`);
+    router.push(`/${catName}/?cat=${catId}&subcat=${subcatId}&dua=${dua}`);
   };
 
   useEffect(() => {
@@ -165,7 +165,7 @@ console.log(typeof(selectedDua));
                         <div>
                           <span
                             onClick={() =>
-                              handleSubcategoryClick(subCat.cat_id, subCat.subcat_id)
+                              handleSubcategoryClick(category.cat_name_en, subCat.cat_id, subCat.subcat_id)
                             }
                             className={`font-semibold text-sm ${
                               expandedSubCategory === subCat.subcat_id
@@ -179,7 +179,7 @@ console.log(typeof(selectedDua));
                           {expandedSubCategory === subCat.subcat_id && (
                             <div className="flex flex-col space-y-4 mt-4 text-sm">
                               {subDuas.map((dua) => (
-                                <div key={dua.dua_id} className="flex flex-row" onClick={() => handleSubDuaClick(category.cat_id,subCat.subcat_id,dua.id)}>
+                                <div key={dua.dua_id} className="flex flex-row" onClick={() => handleSubDuaClick(category.cat_name_en, category.cat_id,subCat.subcat_id,dua.id)}>
                                   <img
                                     src="/duaarrow.svg"
                                     className="-translate-y-1 mr-2"
