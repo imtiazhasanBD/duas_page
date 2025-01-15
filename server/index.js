@@ -5,7 +5,10 @@ const cors = require('cors');
 
 const app = express();
 const port = 3000;
-app.use(cors());
+
+app.use(cors({
+    origin: ['https://duas-page-1.onrender.com', 'http://localhost:3000'], // Array of allowed origins
+  }));
 
   app.get("/", (req, res) => {
     res.json("Server is Working..");
