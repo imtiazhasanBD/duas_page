@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 app.use(cors({
-    origin: 'http://localhost:3001', // Replace with your frontend's URL
+    origin: 'https://duas-page-1.onrender.com/', // Replace with your frontend's URL
   }));
 
   app.get("/", (req, res) => {
