@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 export default function SettingsSection({ toggleSetting, isSettingVisible }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,14 +23,14 @@ export default function SettingsSection({ toggleSetting, isSettingVisible }) {
       {/* Overlay when the drawer is open */}
       {(isSettingVisible && windowWidth <1536) && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          className="fixed inset-0 bg-black bg-opacity-50 z-50"
           onClick={toggleSetting} // Close drawer when clicking outside
         ></div>
       )}
 
       {/* The sliding drawer */}
       <aside
-        className={windowWidth < 1536? (`fixed top-0 right-0 h-full bg-white shadow-lg z-30 transition-transform duration-300 ${
+        className={windowWidth < 1536? (`fixed top-0 right-0 h-full bg-white shadow-lg z-50 transition-transform duration-300 ${
           isSettingVisible ? "translate-x-0" : "translate-x-full"
         } w-[85%] sm:w-[70%] md:w-[350px] rounded-l-3xl h-screen`) : "hidden 2xl:block 3xl:block 3xl:col-start-4 bg-white w-full 2xl:w-[270px] 3xl:w-[300px] min-w-[300px] h-[80vh] mr-40 rounded-xl"}
       >
