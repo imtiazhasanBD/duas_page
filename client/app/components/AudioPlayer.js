@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
-const AudioPlayer = ({audio}) => {
+const AudioPlayer = ({audio, handlePlaying}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
   const [isAutoplay, setIsAutoplay] = useState(false);
@@ -23,7 +23,9 @@ const AudioPlayer = ({audio}) => {
       }
     }
     setIsPlaying(!isPlaying);
+    handlePlaying();
   };
+console.log();
 
   const handleTimeUpdate = () => {
     setCurrentTime(audioRef.current.currentTime || 0);
@@ -66,7 +68,7 @@ const AudioPlayer = ({audio}) => {
 
   return (
     <>
-      <div className="p-4 rounded-lg">
+      <div className="md:p-4 rounded-lg">
         <div className="flex items-center justify-between space-x-4">
           {/* Play Button */}
           <button onClick={handlePlayPause} className="w-full h-full">
@@ -105,7 +107,7 @@ const AudioPlayer = ({audio}) => {
                 -{formatTime(reverseTime)}
               </span>
               {/* Autoplay Toggle */}
-              <div className="mt-2 h-full w-full">
+              <div className="mt-2 h-full w-full cursor-pointer">
                 <Image
                   onChange={() => setIsAutoplay(!isAutoplay)}
                   src="/Dua_icon/suffle.svg"

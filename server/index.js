@@ -4,7 +4,7 @@ const cors = require('cors');
 
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors({
     origin: ['https://duas-page-1.onrender.com', 'http://localhost:3000'], // Array of allowed origins
@@ -93,7 +93,7 @@ app.get('/categories/:cat_id/subcategories/:subcat_id/duas', (req, res) => {
 // Endpoint to fetch all details for a specific category
 app.get('/categories/:cat_id/details', (req, res) => {
     const { cat_id } = req.params;
-  
+
     // Query to fetch subcategories and related duas for the category
     const query = `
         SELECT 
@@ -124,53 +124,70 @@ app.get('/categories/:cat_id/details', (req, res) => {
             sc.subcat_id = d.subcat_id
         WHERE 
             sc.cat_id = ?`;
-  
+
     db.all(query, [cat_id], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
-  
+
         // Transform data into a grouped format: { subcategories -> duas }
         const result = {};
+
         rows.forEach((row) => {
+            // Ensure subcategory grouping
             if (!result[row.subcat_id]) {
                 result[row.subcat_id] = {
                     subcat_id: row.subcat_id,
                     subcat_name_en: row.subcat_name_en,
-                    duas: [],
+                    duas: {},
                 };
             }
-  
+
+            // Ensure dua_id uniqueness within each subcategory
             if (row.dua_id) {
-                // Push the entire `dua` data from the row
-                result[row.subcat_id].duas.push({
-                    dua_id: row.dua_id,
-                    dua_name_bn: row.dua_name_bn,
-                    dua_name_en: row.dua_name_en,
-                    top_bn: row.top_bn,
-                    top_en: row.top_en,
-                    dua_arabic: row.dua_arabic,
-                    dua_indopak: row.dua_indopak,
-                    clean_arabic: row.clean_arabic,
-                    transliteration_bn: row.transliteration_bn,
-                    transliteration_en: row.transliteration_en,
-                    translation_bn: row.translation_bn,
-                    translation_en: row.translation_en,
-                    bottom_bn: row.bottom_bn,
-                    bottom_en: row.bottom_en,
-                    refference_bn: row.refference_bn,
-                    refference_en: row.refference_en,
-                    audio: row.audio,
-                });
+                if (!result[row.subcat_id].duas[row.dua_id]) {
+                    result[row.subcat_id].duas[row.dua_id] = {
+                        dua_id: row.dua_id,
+                        dua_name_bn: row.dua_name_bn,
+                        dua_name_en: row.dua_name_en,
+                        top_bn: row.top_bn,
+                        top_en: row.top_en,
+                        dua_arabic: row.dua_arabic,
+                        dua_indopak: row.dua_indopak,
+                        clean_arabic: row.clean_arabic,
+                        transliteration_bn: row.transliteration_bn,
+                        transliteration_en: row.transliteration_en,
+                        translation_bn: row.translation_bn,
+                        translation_en: row.translation_en,
+                        bottom_bn: row.bottom_bn,
+                        bottom_en: row.bottom_en,
+                        refference_bn: row.refference_bn,
+                        refference_en: row.refference_en,
+                        audio: row.audio,
+                    };
+                } else {
+                    // Merge fields intelligently (if needed for duplicates)
+                    const existingDua = result[row.subcat_id].duas[row.dua_id];
+                    for (const key in row) {
+                        if (!existingDua[key] && row[key]) {
+                            existingDua[key] = row[key];
+                        }
+                    }
+                }
             }
         });
-  
+
+        // Convert `duas` object to an array for each subcategory
+        const transformedResult = Object.values(result).map((subcat) => ({
+            ...subcat,
+            duas: Object.values(subcat.duas),
+        }));
+
         // Send the response
-        res.json(Object.values(result));
+        res.json(transformedResult);
     });
-  });
-  
+});
 
 
 

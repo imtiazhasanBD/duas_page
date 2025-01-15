@@ -4,11 +4,10 @@ import AudioPlayer from "../components/AudioPlayer";
 import { useSearchParams } from "next/navigation";
 import SkeletonLoader from "../components/SkeletonLoader";
 
-const page = () => {
+const DuaSection = () => {
   const searchParams = useSearchParams();
   const [allDous, setAllDous] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
     const cat = searchParams.get("cat");
@@ -17,7 +16,7 @@ const page = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `https://duas-page.onrender.com/categories/${cat_id}/details`,
+          `http://localhost:3001/categories/${cat_id}/details`,
           {
             cache: "no-store",
           }
@@ -31,14 +30,10 @@ const page = () => {
     };
 
     fetchCategoryDetails(cat);
-  }, [searchParams.get("cat")]);
+  }, [searchParams]);
   if (loading) {
     return <SkeletonLoader />;
   }
-
- const handlePlaying = () => {
-     setIsPlaying(!isPlaying);
- } 
 
 
   console.log(allDous);
@@ -48,7 +43,7 @@ const page = () => {
       {allDous?.map((subCat) => (
         <div id={`${subCat.subcat_name_en+subCat.subcat_id}`} key={subCat.subcat_id}>
           {/* sub category name*/}
-          <div className="flex mb-5 lg:mr-2  flex-row bg-white rounded-lg px-6 py-4 justify-start items-center">
+          <div className="flex mb-5 mr-2  flex-row bg-white rounded-lg px-6 py-4 justify-start items-center">
             <p className="text-gray-800 font-medium">
               <span className="text-customGreen">Section: </span>
               {subCat.subcat_name_en}
@@ -57,9 +52,9 @@ const page = () => {
           {/* dua section */}
           {subCat.duas?.map((dus) => (
             <div
-              id={dus.dua_id}
+              id={`${dus.dua_name_en+dus.dua_id}`}
               key={dus.dua_id}
-              className="bg-white shadow-md rounded-lg px-6 pt-6 mb-6 lg:mr-2"
+              className="bg-white shadow-md rounded-lg px-6 pt-6 mb-6 mr-2"
             >
               {/* Title */}
               <div className="flex flex-row  justify-start items-center ">
@@ -102,13 +97,13 @@ const page = () => {
               </div>
 
               {/* Action Icons */}
-              <div className="flex flex-row gap-2 items-center justify-between pt-6">
+              <div className="flex flex-row items-center justify-between pt-6">
                 {dus.audio ? (
-                  <AudioPlayer audio={dus.audio} handlePlaying={handlePlaying} />
+                  <AudioPlayer audio={dus.audio} />
                 ) : (
                   <div className="flex-grow"></div>
                 )}
-                <div className={`flex items-center gap-x-6 py-6 xs:gap-x-4 ${isPlaying? "hidden sm:flex" : ""}`}>
+                <div className="flex items-center gap-x-6 py-6 xs:gap-x-4">
                   <div id="copy" className="relative w-6">
                     <img
                       className="cursor-pointer"
@@ -150,9 +145,8 @@ const page = () => {
           ))}
         </div>
       ))}
-      
     </div>
   );
 };
 
-export default page;
+export default DuaSection;

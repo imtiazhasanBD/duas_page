@@ -1,6 +1,6 @@
 const SkeletonLoader = () => {
   return (
-    <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 animate-pulse w-full mr-36">
+    <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 animate-pulse w-full xl:mr-36 2xl:mr-0">
       {/* Skeleton for each subcategory */}
       {[...Array(3)].map((_, idx) => (
         <div key={idx} className="mb-6">

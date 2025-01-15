@@ -3,7 +3,7 @@ import { nav_icon } from "../data/data";
 
 const SideNavBar = () => {
   return (
-    <aside className="fixed top-6 left-6 h-screen w-[100px] bg-white shadow-md dark:bg-gray-800 overflow-y-auto  rounded-3xl px-4 dark:bg-dark-bg lg:h-[calc(93vh)] xl:h-[94vh] 2xl:h-[93vh] pb-16 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 py-8">
+    <aside className="fixed top-6 left-6 h-screen w-[100px] bg-white shadow-md dark:bg-gray-800 overflow-y-auto  rounded-3xl px-4 dark:bg-dark-bg lg:h-[calc(93vh)] xl:h-[94vh] 2xl:h-[93vh] pb-16 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 py-8 hidden xl:block">
       <div className="m-auto">
         <img
           src="/nav_icon/dua-logo.svg"
