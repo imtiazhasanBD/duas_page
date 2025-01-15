@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import CategorySection from "./components/CategorySection";
 import Header from "./components/Header";
 import SideNavBar from "./components/SideNavBar";
 import "./globals.css";
+import SkeletonCategory from "./components/SkeletonCategory";
 
 export default function RootLayout({ children }) {
   return (
@@ -22,7 +24,9 @@ export default function RootLayout({ children }) {
                 className="mx-2 h-[85.5vh] lg:min-w-[350px] overflow-hidden bg-white
       xs:hidden sm:hidden md:hidden lg:block xs:h-screen sm:h-screen lg:h-[85vh] space-y-10 overflow-y-auto"
               >
-                <CategorySection />
+                <Suspense fallback={<SkeletonCategory />}>
+                  <CategorySection />
+                </Suspense>
               </div>
 
               {/* Main Content */}
