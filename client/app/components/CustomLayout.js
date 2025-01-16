@@ -37,8 +37,7 @@ const CustomLayout = ({children}) => {
           <section>
             {/* Categories */}
             <div
-              className="mx-2 h-[85.5vh] lg:min-w-[350px] overflow-hidden bg-white
-      xs:hidden sm:hidden md:hidden lg:block xs:h-screen sm:h-screen  lg:h-[85vh] space-y-10 overflow-y-auto"
+              className="mx-2 h-[85.5vh] lg:min-w-[350px] overflow-hidden bg-white lg:h-[85vh] space-y-10 overflow-y-auto "
             >
               <Suspense fallback={<SkeletonCategory />}>
                 <CategorySection toggleCategory={toggleCategory} isCategoryVisible={isCategoryVisible} />

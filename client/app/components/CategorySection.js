@@ -143,7 +143,7 @@ console.log(isCategoryVisible);
 <section
   className={`fixed top-[85px] sm:top-0 left-0 h-screen w-[80%] max-w-[350px] bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
     isCategoryVisible ? "translate-x-0" : "-translate-x-full"
-  } lg:translate-x-0 xl:relative lg:h-[85vh] lg:min-w-[350px] lg:max-w-[350px] rounded-t-lg overflow-hidden scrollbar-none`}
+  } lg:translate-x-0 lg:relative lg:h-[85vh] lg:min-w-[350px] lg:max-w-[350px] rounded-t-lg overflow-hidden scrollbar-none`}
 >
   <div className="h hidden sm:block">
     <h2 className="font-medium text-lg text-center text-white bg-customGreen  p-[14px]">

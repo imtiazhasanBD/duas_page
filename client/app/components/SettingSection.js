@@ -8,7 +8,7 @@ export default function SettingsSection({ toggleSetting, isSettingVisible }) {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -32,7 +32,7 @@ export default function SettingsSection({ toggleSetting, isSettingVisible }) {
       <aside
         className={windowWidth < 1536? (`fixed top-0 right-0 h-full bg-white shadow-lg z-50 transition-transform duration-300 ${
           isSettingVisible ? "translate-x-0" : "translate-x-full"
-        } w-[85%] sm:w-[70%] md:w-[350px] rounded-l-3xl h-screen`) : "hidden 2xl:block 3xl:block 3xl:col-start-4 bg-white w-full 2xl:w-[270px] 3xl:w-[300px] min-w-[300px] h-[80vh] mr-40 rounded-xl"}
+        } w-[75%] sm:w-[70%] md:w-[350px] rounded-l-3xl h-screen`) : "hidden 2xl:block 3xl:block 3xl:col-start-4 bg-white w-full 2xl:w-[270px] 3xl:w-[300px] min-w-[300px] h-[80vh] mr-40 rounded-xl"}
       >
         <div className="p-4">
           <h2 className="text-2xl text-center font-semibold p-6">Settings</h2>
