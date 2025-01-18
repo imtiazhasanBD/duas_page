@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
-const AudioPlayer = ({audio, handlePlaying}) => {
+const AudioPlayer = ({ audio, handlePlaying }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
-  const [isAutoplay, setIsAutoplay] = useState(false);
+  const [isLooping, setIsLooping] = useState(false); // Controls the loop functionality
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
@@ -16,16 +16,15 @@ const AudioPlayer = ({audio, handlePlaying}) => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      if (isAutoplay) {
-        audioRef.current.play(); // Autoplay enabled
-      } else {
-        audioRef.current.play(); // Normal play
-      }
+      audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
-    handlePlaying();
+    handlePlaying && handlePlaying(!isPlaying); // Notify parent if needed
   };
-console.log();
+
+  const handleToggleLoop = () => {
+    setIsLooping((prevState) => !prevState); // Toggle looping
+  };
 
   const handleTimeUpdate = () => {
     setCurrentTime(audioRef.current.currentTime || 0);
@@ -33,7 +32,15 @@ console.log();
 
   const handleLoadedData = () => {
     setDuration(audioRef.current.duration || 0);
-    if (isAutoplay) audioRef.current.play(); // Autoplay on load
+  };
+
+  const handleAudioEnd = () => {
+    if (isLooping) {
+      audioRef.current.currentTime = 0; // Reset to start if looping is enabled
+      audioRef.current.play();
+    } else {
+      setIsPlaying(false); // Stop playing if looping is disabled
+    }
   };
 
   const handleProgressChange = (event) => {
@@ -45,14 +52,17 @@ console.log();
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Event listeners
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("loadeddata", handleLoadedData);
+    audio.addEventListener("ended", handleAudioEnd);
 
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("loadeddata", handleLoadedData);
+      audio.removeEventListener("ended", handleAudioEnd);
     };
-  }, [isAutoplay]);
+  }, [isLooping]);
 
   const formatTime = (seconds) => {
     if (isNaN(seconds)) return "0:00";
@@ -106,12 +116,16 @@ console.log();
               <span className="text-sm text-gray-600 w-full">
                 -{formatTime(reverseTime)}
               </span>
-              {/* Autoplay Toggle */}
-              <div className="mt-2 h-full w-full cursor-pointer">
+
+              {/* Loop Toggle */}
+              <div
+                className="mt-2 h-full w-full cursor-pointer"
+                onClick={handleToggleLoop} // Handle loop toggle
+              >
                 <Image
-                  onChange={() => setIsAutoplay(!isAutoplay)}
                   src="/Dua_icon/suffle.svg"
-                  alt="Play"
+                  className={`${!isLooping && "opacity-60"}`}
+                  alt="Loop Toggle"
                   width={35}
                   height={35}
                 />
@@ -121,6 +135,7 @@ console.log();
         </div>
       </div>
 
+      {/* Audio Tag */}
       <audio
         src={audio.replace("http://www.ihadis.com/", "https://api.duaruqyah.com/")}
         ref={audioRef}

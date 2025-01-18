@@ -21,7 +21,7 @@ export default function CategorySection({toggleCategory,isCategoryVisible}) {
   const subcat_id = searchParams.get("subcat");
   const dua_id = searchParams.get("dua");
   const router = useRouter();
-console.log(isCategoryVisible);
+console.log(subDuas);
 
   // Fetch all categories
   useEffect(() => {
@@ -230,7 +230,7 @@ console.log(isCategoryVisible);
                                     category.cat_name_en,
                                     category.cat_id,
                                     subCat.subcat_id,
-                                    dua.id,
+                                    dua.dua_id,
                                     dua.dua_name_en
                                   )
                                 }
