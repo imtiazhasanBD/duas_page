@@ -7,7 +7,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors({
-    origin: ['https://duas-page-1.onrender.com', 'http://localhost:3000'], // Array of allowed origins
+    origin: ['https://duas-page-1.onrender.com', 'https://dua-page-ten.vercel.app', 'http://localhost:3000'], // Array of allowed origins
   }));
 
   app.get("/", (req, res) => {
